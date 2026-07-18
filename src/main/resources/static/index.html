@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Shelly Power Monitor</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #121212; color: #fff; text-align: center; padding: 50px; }
+    .card { background: #1e1e1e; padding: 30px; border-radius: 15px; display: inline-block; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+    .reading { font-size: 48px; color: #00ffcc; font-weight: bold; margin: 20px 0; }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <h2>Live Shelly Consumption</h2>
+  <div id="powerDisplay" class="reading">Waiting for data...</div>
+</div>
+
+<script>
+  const eventSource = new EventSource('/stream');
+
+  eventSource.onmessage = function(event) {
+    console.log("Raw event data arrived:", event.data);
+    document.getElementById('powerDisplay').innerText = event.data;
+  };
+
+  eventSource.onerror = function() {
+    document.getElementById('powerDisplay').innerText = "Disconnected from server.";
+  };
+</script>
+</body>
+</html>
